@@ -33,21 +33,25 @@ import purchaseBatchRoutes from './routes/purchase-batches.js';
 // Import middleware
 import { authenticate } from './middleware/auth.js';
 
+// Initialize Express app
+const app = express();
+const PORT = process.env.PORT || 4000;
+
+// THEN middleware
 app.use(express.json());
-const allowedOrigins = [
-  'https://hash-inventory.vercel.app',
-];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
+  origin: 'https://hash-inventory.vercel.app',
+  credentials: true
 }));
+
+app.options('*', cors({
+  origin: 'https://hash-inventory.vercel.app',
+  credentials: true
+}));
+
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 // Load environment variables
 dotenv.config();
 
@@ -55,9 +59,7 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Initialize Express app
-const app = express();
-const PORT = process.env.PORT || 4000;
+
 
 // Connect to MongoDB
 connectDB();
