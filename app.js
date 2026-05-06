@@ -33,6 +33,7 @@ import purchaseBatchRoutes from './routes/purchase-batches.js';
 // Import middleware
 import { authenticate } from './middleware/auth.js';
 
+app.use(express.json());
 const allowedOrigins = [
   'https://hash-inventory.vercel.app',
 ];
@@ -62,7 +63,7 @@ const PORT = process.env.PORT || 4000;
 connectDB();
 
 
-app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
