@@ -33,6 +33,20 @@ import purchaseBatchRoutes from './routes/purchase-batches.js';
 // Import middleware
 import { authenticate } from './middleware/auth.js';
 
+const allowedOrigins = [
+  'https://hash-inventory.vercel.app',
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
 // Load environment variables
 dotenv.config();
 
@@ -47,11 +61,7 @@ const PORT = process.env.PORT || 4000;
 // Connect to MongoDB
 connectDB();
 
-// Middleware
-app.use(cors({
-  origin:'https://hash-inventory.vercel.app',
-  credentials: true
-}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
